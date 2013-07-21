@@ -68,19 +68,19 @@ class Motor(object):
             sens = "HORAIRE"
         return (self.vitesse, sens, self.enable)
 
-    def set_sens_HO(self):
+    def set_sens_AH(self):
         if not self.test:
             ## GPIO COMMAND
-            GPIO.output(self.GPIO.IN1, GPIO.LOW)
-            GPIO.output(self.GPIO.IN2, GPIO.HIGH)
-        self.sens = Motor.HO
+            GPIO.output(self.GPIO_IN1, GPIO.LOW)
+            GPIO.output(self.GPIO_IN2, GPIO.HIGH)
+        self.sens = Motor.AH
 
     def set_sens_AH(self):
         if not self.test:
             ## GPIO COMMAND
-            GPIO.output(self.GPIO.IN1, GPIO.HIGH)
-            GPIO.output(self.GPIO.IN2, GPIO.LOW)
-        self.sens = Motor.AH
+            GPIO.output(self.GPIO_IN1, GPIO.HIGH)
+            GPIO.output(self.GPIO_IN2, GPIO.LOW)
+        self.sens = Motor.HO
 
     def set_speed(self, vitesse):
         self.vitesse = vitesse
@@ -320,7 +320,21 @@ class Robot(object):
 
     def do_sens(self, arg):
         self.log("Cmd : %s / %s" % ("SENS", arg))
-        return self.dummy_cmd()
+        if arg[0] == "AVANT":
+            self.do_stop()
+            for m in (self.moteur_droit, self.moteur_gauche):
+                m.set_sens(Motor.HO)
+            self.sens = Motor.HO
+            self.do_start()
+        elif arg[0] == "ARRIERE":
+            self.do_stop()
+            for m in (self.moteur_droit, self.moteur_gauche):
+                m.set_sens(Motor.AH)
+            self.sens = Motor.AH
+            self.do_start()
+        else:
+            return ('KO', 'SENS ERROR %s ' % arg[0])
+        return ('OK', "SENS %s " % arg[0] )
 
     def do_speed(self, arg):
         self.log("Cmd : %s / %s" % ("SPEED", arg))
@@ -370,7 +384,6 @@ def test():
     print "SET ROBOT ONLINE : ", R.commande("SET ROBOT ONLINE")
     print "START     : ", R.commande("START")
     print "STATUS    : ", R.commande("STATUS")[1]
-    #print "AVANCE    : ", R.commande("AVANCE")
     #print "GAUCHE    : ", R.commande("GAUCHE")
     time.sleep(2)
     print "SPEED_MED : ", R.commande("SPEED MED")
@@ -380,6 +393,9 @@ def test():
     print "STATUS    : ", R.commande("STATUS")[1]
     time.sleep(2)
     print "SPEED_MIN : ", R.commande("SPEED MIN")
+    print "STATUS    : ", R.commande("STATUS")[1]
+    time.sleep(2)
+    print "SENS_ARRIERE : ", R.commande("SENS ARRIERE")
     print "STATUS    : ", R.commande("STATUS")[1]
     time.sleep(2)
     print "STOP      : ", R.commande("STOP")

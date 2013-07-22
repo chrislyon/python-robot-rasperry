@@ -1,0 +1,44 @@
+
+Detail des fonctions de bases :
+
+def attente(t=0.1):
+    """
+    Permet d'attendre une seconde par defaut sinon t
+    Le temps 0.1 est le temps minimal pour voir qq chose
+    """
+    print "Attente t=%s s" % t
+    time.sleep(t)
+
+online  : Pour un moteur
+    ## Par defaut on met le moteur en mode AVANCE
+    GPIO.setup( en1, GPIO.OUT, initial=GPIO.LOW)
+    GPIO.setup( en2, GPIO.OUT, initial=GPIO.HIGH)
+    GPIO.setup( pwm, GPIO.OUT)
+    pwm = GPIO.PWM( pwm, FREQUENCE=50 )
+
+offline / desactive le moteur
+    pwm.stop()
+    GPIO.setup( en1, False)
+    GPIO.setup( en2, False)
+    GPIO.setup( pwm, False)
+
+Avance pour un moteur
+    GPIO.output( en1 , GPIO.LOW)
+    GPIO.output( en2 , GPIO.HIGH)
+    pwm.start( vitesse )
+
+    en1 = Broche 1
+    en2 = Broche 2
+    pwm = Broche parametre pwm
+
+Recule pour un moteur
+    GPIO.output( en1 , GPIO.HIGH)
+    GPIO.output( en2 , GPIO.LOW)
+    pwm.start( vitesse )
+
+    en1 = Broche 1
+    en2 = Broche 2
+    pwm = Broche parametre pwm
+
+Fin / cleanup
+    GPIO.cleanup()

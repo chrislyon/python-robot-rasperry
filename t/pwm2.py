@@ -16,37 +16,65 @@ en2 = 23
 
 en3 = 22
 en4 = 27
-
 all  = (pwm1, pwm2, en1, en2, en3, en4)
 
-for g in all:
-    GPIO.setup(g, GPIO.OUT)
-    print "Setting GPIO %s : OUT" % g
 
-## Moteur 1
-print "Enable moteur 1"
-GPIO.output(en1, GPIO.LOW)
-GPIO.output(en2, GPIO.HIGH)
-p1 = GPIO.PWM(pwm1, 50)    # create an object p for PWM on port at 50 Hertz  
-                        # you can have more than one of these, but they need  
-                        # different names for each port   
-                        # e.g. p1, p2, motor, servo1 etc.  
-  
-p1.start(50)             # start the PWM on 50 percent duty cycle  
-                        # duty cycle value can be 0.0 to 100.0%, floats are OK  
+## Attente
+def attente(t=2):
+    print "Attente : %s s" % t
+    time.sleep(t)
 
+
+## Init
+def init():
+    for g in all:
+        GPIO.setup(g, GPIO.OUT)
+        print "Setting GPIO %s : OUT" % g
+
+
+def av_1():
+    print "Avance moteur 1"
+    GPIO.output(en1, GPIO.LOW)
+    GPIO.output(en2, GPIO.HIGH)
+    p1.start(30)
+
+def re_1():
+    print "Recule moteur 1"
+    GPIO.output(en1, GPIO.HIGH)
+    GPIO.output(en2, GPIO.LOW)
+    p1.start(30)
 
 ## Moteur 2
-print "Enable moteur 1"
-GPIO.output(en3, GPIO.LOW)
-GPIO.output(en4, GPIO.HIGH)
+def av_2():
+    print "Forward moteur 2"
+    GPIO.output(en3, GPIO.LOW)
+    GPIO.output(en4, GPIO.HIGH)
+    p2.start(30)
+  
+## ======
+## Main
+## ======
+
+init()
+
+p1 = GPIO.PWM(pwm1, 50)
 p2 = GPIO.PWM(pwm2, 50)
-p2.start(50)
-  
-print "Attente"
-time.sleep(10)
-  
-p1.stop()                # stop the PWM output  
+
+av_1()
+attente()
+p1.stop()
+
+
+av_2()
+attente()
 p2.stop()
+
+re_1()
+attente()
+p1.stop()
+
+av_1()
+attente()
+p1.stop()
   
 GPIO.cleanup()          # when your program exits, tidy up after yourself  

@@ -65,7 +65,7 @@ class Motor(object):
         self.pwm.stop()
         self.vitesse = 0
 
-def test():
+def test_m1():
     M = Motor( "Moteur 1", RASP.RASP_SET1[0], RASP.RASP_SET1[1], RASP.RASP_SET1[2] )
     print "Enable %s " % M
     M.enable()
@@ -81,6 +81,8 @@ def test():
     M.stop()
     print "Disable %s " % M
     M.disable()
+
+def test_m2():
     ## Moteur 2
     M = Motor( "Moteur 2", RASP.RASP_SET2[0], RASP.RASP_SET2[1], RASP.RASP_SET2[2] )
     print "Enable %s " % M
@@ -98,6 +100,9 @@ def test():
     print "Disable %s " % M
     M.disable()
     
+def test():
+    #test_m1()
+    test_m2()
     GPIO.cleanup()
 
 if __name__ == '__main__':

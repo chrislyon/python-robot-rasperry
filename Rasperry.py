@@ -13,8 +13,9 @@ SPEED_MAX = 80
 
 PWM_FREQ = 50
 
+## PWM IN1 IN2
 RASP_SET1 = (25, 18, 23)
-RASP_SET2 = (17, 22, 27)
+RASP_SET2 = (17, 22, 24)
 
 def GPIO_cleanup(self):
     ## GPIO COMMAND

@@ -101,8 +101,8 @@ def test_m2():
     M.disable()
     
 def test():
-    #test_m1()
-    test_m2()
+    test_m1()
+    #test_m2()
     GPIO.cleanup()
 
 if __name__ == '__main__':
